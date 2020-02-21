@@ -7,11 +7,9 @@ import java.util.List;
 
 public class Statistics {
 
-    private Reader reader;
     private List<Player> players;
 
     public Statistics(Reader reader) {
-        this.reader = reader;
         players = reader.getPlayers();       
     }
 
