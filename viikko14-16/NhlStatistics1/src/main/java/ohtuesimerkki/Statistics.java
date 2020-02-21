@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-
-
 public class Statistics {
 
     private Reader reader;
@@ -44,7 +42,7 @@ public class Statistics {
         ArrayList<Player> topScorers = new ArrayList<Player>();
         Iterator<Player> playerIterator = players.iterator();
         
-        while (howMany>=0) {
+        while (howMany > 0) {
             topScorers.add( playerIterator.next() );            
             howMany--;
         }
