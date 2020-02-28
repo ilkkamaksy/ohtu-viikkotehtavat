@@ -1,5 +1,0 @@
-pekka;akkep
-jukka;akkuj
-teppo;salainen1
-jarppa;jarpansalaisuus1
-japijapi;salainen1
