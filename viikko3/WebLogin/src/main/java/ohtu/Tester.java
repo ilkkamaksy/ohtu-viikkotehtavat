@@ -11,8 +11,8 @@ import java.util.Random;
 public class Tester {
 
     public static void main(String[] args) {
-        WebDriver driver = new ChromeDriver();
-        // WebDriver driver = new HtmlUnitDriver();
+        // WebDriver driver = new ChromeDriver();
+        WebDriver driver = new HtmlUnitDriver();
 
         // Käyttäjän kirjautuminen
         driver.get("http://localhost:4567");
