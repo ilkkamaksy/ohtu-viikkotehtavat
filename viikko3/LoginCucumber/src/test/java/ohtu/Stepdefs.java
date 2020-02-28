@@ -52,25 +52,25 @@ public class Stepdefs {
 
     @Given("user {string} with password {string} is created")
     public void userWithPasswordIsCreated(String username, String password) {
-        inputLines = new ArrayList<>();
-        inputLines.add("new");
+        this.commandNewIsSelected();
         inputLines.add(username);
         inputLines.add(password);
-        io = new StubIO(inputLines); 
-        app = new App(io, auth);
-        app.run();
+        this.executeInputLinesCommands();
     }
 
     @When("username {string} with password {string} are entered")
     public void usernameWithPasswordAreEntered(String username, String password) {
-        inputLines = new ArrayList<>();
+        inputLines.clear();
         inputLines.add("login");
         inputLines.add(username);
         inputLines.add(password);
+        this.executeInputLinesCommands();
+    }
+
+    private void executeInputLinesCommands() {
         io = new StubIO(inputLines); 
         app = new App(io, auth);
         app.run();
     }
-
 
 }
