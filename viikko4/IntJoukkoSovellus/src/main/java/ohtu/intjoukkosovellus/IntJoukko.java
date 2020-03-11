@@ -22,14 +22,15 @@ public class IntJoukko {
     public IntJoukko(int kapasiteetti, int kasvatuskoko) {
         this.kapasiteetti = kapasiteetti;
         this.kasvatuskoko = kasvatuskoko;
-        this.alkioidenLkm = 0;
         this.onkoValidiKapasiteettiJaKasvatuskoko();
+        this.alkioidenLkm = 0;
         this.lukuJoukko = new int[kapasiteetti];
     }
 
     public boolean lisaa(int luku) {
         if (!kuuluu(luku)) {
             lukuJoukko[alkioidenLkm] = luku;
+            alkioidenLkm++;
             tarkistaLukujoukonKoko();
             return true;
         }
@@ -37,7 +38,6 @@ public class IntJoukko {
     }
 
     private void tarkistaLukujoukonKoko() {
-        alkioidenLkm++;
         if (alkioidenLkm % lukuJoukko.length == 0) {
             kasvataLukujoukkoa();
         }
@@ -103,10 +103,10 @@ public class IntJoukko {
         IntJoukko tulos = new IntJoukko();
         
         int[] arvotA = joukkoA.toIntArray();
-        lisaaArvotJoukkoon(arvotA, tulos);
+        tulos = lisaaArvotJoukkoon(arvotA, tulos);
         
         int[] arvotB = joukkoB.toIntArray();
-        lisaaArvotJoukkoon(arvotB, tulos);
+        tulos = lisaaArvotJoukkoon(arvotB, tulos);
         
         return tulos;
     }
@@ -128,10 +128,10 @@ public class IntJoukko {
         IntJoukko tulos = new IntJoukko();
         
         int[] lahdeArvot = lahde.toIntArray();
-        lisaaArvotJoukkoon(lahdeArvot, tulos);
+        tulos = lisaaArvotJoukkoon(lahdeArvot, tulos);
 
         int[] poistoArvot = poistettavat.toIntArray();
-        poistaArvotJoukosta(poistoArvot, tulos);
+        tulos = poistaArvotJoukosta(poistoArvot, tulos);
 
         return tulos;
     }
@@ -144,16 +144,18 @@ public class IntJoukko {
         return taulu;
     }
 
-    private static void lisaaArvotJoukkoon(int[] arvot, IntJoukko joukko) {
+    private static IntJoukko lisaaArvotJoukkoon(int[] arvot, IntJoukko joukko) {
         for (int i = 0; i < arvot.length; i++) {
             joukko.lisaa(arvot[i]);
         }
+        return joukko;
     }
 
-    private static void poistaArvotJoukosta(int[] arvot, IntJoukko joukko) {
+    private static IntJoukko poistaArvotJoukosta(int[] arvot, IntJoukko joukko) {
         for (int i = 0; i < arvot.length; i++) {
             joukko.poista(arvot[i]);
         }
+        return joukko;
     }
 
     private void onkoValidiKapasiteettiJaKasvatuskoko() {
