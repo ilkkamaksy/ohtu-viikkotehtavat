@@ -21,41 +21,69 @@ import laskin.Sovelluslogiikka;
  */
 public class KomentoTehdas {
 
-    private HashMap<Button, Komento> komennot;
+    TextField tuloskentta;
+    TextField syotekentta;
+    Button plus;
+    Button miinus;
+    Button nollaa;
+    Button undo;
+    Sovelluslogiikka sovellus;
     private ArrayDeque<Komento> historia;
 
-    public KomentoTehdas(TextField tuloskentta, TextField syotekentta, Button plus, Button miinus, Button nollaa, Button undo, Sovelluslogiikka sovellus) {
-        this.komennot = new HashMap<>();    
-        this.komennot.put(plus, makeSumma(tuloskentta, syotekentta, nollaa, undo, sovellus));
-        this.komennot.put(miinus, makeMiinus(tuloskentta, syotekentta, nollaa, undo, sovellus));
-        this.komennot.put(nollaa, makeNollaa(tuloskentta, syotekentta, nollaa, undo, sovellus));
+    public KomentoTehdas(
+        TextField tuloskentta, 
+        TextField syotekentta, 
+        Button plus, 
+        Button miinus, 
+        Button nollaa, 
+        Button undo, 
+        Sovelluslogiikka sovellus
+    ) {
+        this.tuloskentta = tuloskentta;
+        this.syotekentta = syotekentta;
+        this.plus = plus;
+        this.miinus = miinus;
+        this.nollaa = nollaa;
+        this.undo = undo;
+        this.sovellus = sovellus;
         this.historia = new ArrayDeque<>();
     }
 
-    public Komento make(Event event) {
-        Komento komento = this.komennot.get( (Button)event.getTarget() );
-        historia.addFirst(komento);
-        return komento;
+    public void execute(Event event) {
+        Komento komento = null;
+        if ( (Button)event.getTarget() == this.plus ) {
+            komento = new Summa(this.tuloskentta, this.syotekentta, this.nollaa, this.undo, this.sovellus);
+        } else if ( (Button)event.getTarget() == this.miinus ) {
+            komento = new Miinus(this.tuloskentta, this.syotekentta, this.nollaa, this.undo, this.sovellus);
+        } else {
+            komento = new Nollaa(this.tuloskentta, this.syotekentta, this.nollaa, this.undo, this.sovellus);
+        }
+        this.historia.addFirst(komento);
+        komento.suorita();
+        this.paivitaTila();
     }
 
-    private static Komento makeSumma(TextField tuloskentta, TextField syotekentta, Button nollaa, Button undo, Sovelluslogiikka sovellus) {
-        return new Summa(tuloskentta, syotekentta, nollaa, undo, sovellus);
+    public void undoKomento() {
+        Komento komento = this.historia.poll();
+        komento.peru();
+        this.paivitaTila();
     }
 
-    private static Komento makeMiinus(TextField tuloskentta, TextField syotekentta, Button nollaa, Button undo, Sovelluslogiikka sovellus) {
-        return new Miinus(tuloskentta, syotekentta, nollaa, undo, sovellus);
+    protected void paivitaTila() {
+        this.asetaTulos();
+        this.asetaUndoNapinTila();
+        this.asetaNollausNapinTila();
+    }
+    protected void asetaTulos() {    
+        this.syotekentta.setText("");
+        this.tuloskentta.setText("" + this.sovellus.tulos());
     }
 
-    private static Komento makeNollaa(TextField tuloskentta, TextField syotekentta, Button nollaa, Button undo, Sovelluslogiikka sovellus) {
-        return new Nollaa(tuloskentta, syotekentta, nollaa, undo, sovellus);
+    protected void asetaNollausNapinTila() {
+        this.nollaa.disableProperty().set( this.sovellus.tulos() == 0);
     }
 
-    public Komento getPrevious() {
-        return historia.poll();
-    }
-
-    @Override
-    public String toString() {
-        return "komentotehdas " + this.historia.toString();
+    protected void asetaUndoNapinTila() {
+        this.undo.disableProperty().set( this.historia.isEmpty() );
     }
 }
