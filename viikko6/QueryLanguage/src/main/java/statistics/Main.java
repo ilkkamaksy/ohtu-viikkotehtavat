@@ -11,18 +11,18 @@ public class Main {
 
         Statistics stats = new Statistics(new PlayerReaderImpl(url));
           
-        QueryBuilder query1 = new QueryBuilder();
-        Matcher m1 = query1.playsIn("PHI")
+        QueryBuilder query = new QueryBuilder();
+        Matcher m1 = query.playsIn("PHI")
           .hasAtLeast(10, "assists")
           .hasFewerThan(8, "goals").build();
 
-        QueryBuilder query2 = new QueryBuilder();
-        Matcher m2 = query2.playsIn("EDM")
+        query = new QueryBuilder();
+        Matcher m2 = query.playsIn("EDM")
                 .hasAtLeast(20, "points").build();
 
-        QueryBuilder query3 = new QueryBuilder();
-        Matcher m = query3.oneOf(m1, m2).build();
-        
+        query = new QueryBuilder();
+        Matcher m = query.oneOf(m1, m2).build();
+           
         for (Player player : stats.matches(m)) {
             System.out.println( player );
         }
