@@ -10,6 +10,9 @@ import laskin.Sovelluslogiikka;
  */
 public class Summa extends BinaariKomento {
 
+    private int arvo;
+    private int tulos;
+
     public Summa(
         TextField tuloskentta, 
         TextField syotekentta, 
@@ -22,7 +25,9 @@ public class Summa extends BinaariKomento {
 
     @Override
     public void suorita() {
-        super.otaArvo();
-        super.sovellus.plus(arvo);
+        this.tulos = sovellus.tulos();
+        this.arvo = Integer.valueOf(syotekentta.getText());
+        sovellus.plus(this.arvo);
     }
+
 }

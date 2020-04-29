@@ -28,6 +28,7 @@ public class KomentoTehdas {
     Button nollaa;
     Button undo;
     Sovelluslogiikka sovellus;
+    private HashMap<Button, Komento> komennot;
     private ArrayDeque<Komento> historia;
 
     public KomentoTehdas(
@@ -47,26 +48,40 @@ public class KomentoTehdas {
         this.undo = undo;
         this.sovellus = sovellus;
         this.historia = new ArrayDeque<>();
+
+        this.komennot = new HashMap<>();
+        this.komennot.put(plus, new Summa(this.tuloskentta, this.syotekentta, this.nollaa, this.undo, this.sovellus));
+        this.komennot.put(miinus, new Miinus(this.tuloskentta, this.syotekentta, this.nollaa, this.undo, this.sovellus));
+        this.komennot.put(nollaa, new Nollaa(this.tuloskentta, this.syotekentta, this.nollaa, this.undo, this.sovellus));
     }
 
     public void execute(Event event) {
+
         Komento komento = null;
-        if ( (Button)event.getTarget() == this.plus ) {
-            komento = new Summa(this.tuloskentta, this.syotekentta, this.nollaa, this.undo, this.sovellus);
-        } else if ( (Button)event.getTarget() == this.miinus ) {
-            komento = new Miinus(this.tuloskentta, this.syotekentta, this.nollaa, this.undo, this.sovellus);
+        Button komentoTyyppi = (Button) event.getTarget();
+        
+        if (komentoTyyppi == this.undo) {
+            komento = this.historia.poll();
+            komento.peru();
         } else {
-            komento = new Nollaa(this.tuloskentta, this.syotekentta, this.nollaa, this.undo, this.sovellus);
+            komento = this.haeKomento(komentoTyyppi);
+            this.historia.addFirst(komento);
+            komento.suorita();
         }
-        this.historia.addFirst(komento);
-        komento.suorita();
+
         this.paivitaTila();
     }
 
-    public void undoKomento() {
-        Komento komento = this.historia.poll();
-        komento.peru();
-        this.paivitaTila();
+    private Komento haeKomento(Button kasky) {
+        try {
+            Komento komento = this.komennot.get(kasky)
+                .getClass()
+                .getDeclaredConstructor(tuloskentta.getClass(), syotekentta.getClass(), nollaa.getClass(), undo.getClass(), sovellus.getClass())
+                .newInstance(this.tuloskentta, this.syotekentta, this.nollaa, this.undo, this.sovellus);            
+            return komento;            
+        } catch (Exception e) { 
+            return null;
+        }
     }
 
     protected void paivitaTila() {
@@ -74,6 +89,7 @@ public class KomentoTehdas {
         this.asetaUndoNapinTila();
         this.asetaNollausNapinTila();
     }
+
     protected void asetaTulos() {    
         this.syotekentta.setText("");
         this.tuloskentta.setText("" + this.sovellus.tulos());

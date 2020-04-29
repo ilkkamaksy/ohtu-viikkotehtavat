@@ -22,10 +22,4 @@ public abstract class BinaariKomento extends Komento {
 
     public abstract void suorita();
 
-    public void otaArvo() {
-        try {
-            super.arvo = Integer.parseInt(this.syotekentta.getText());
-        } catch (Exception e) {
-        }
-    }
 }

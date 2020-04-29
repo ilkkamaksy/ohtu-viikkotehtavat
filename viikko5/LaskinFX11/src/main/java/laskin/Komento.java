@@ -15,8 +15,8 @@ public abstract class Komento {
     protected Button nollaa;
     protected Button undo;
     protected Sovelluslogiikka sovellus;
-    int arvo = 0;
-    int tulos = 0;
+    protected int arvo = 0;
+    protected int tulos = 0;
 
     public Komento(
         TextField tuloskentta, 
@@ -38,4 +38,5 @@ public abstract class Komento {
     public void peru() {
         sovellus.setTulos(this.tulos);
     }
+
 }

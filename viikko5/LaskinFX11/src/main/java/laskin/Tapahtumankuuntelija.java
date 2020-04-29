@@ -24,12 +24,7 @@ public class Tapahtumankuuntelija implements EventHandler {
     
     @Override
     public void handle(Event event) {
-        if (event.getTarget() != undo) {
-            komentotehdas.execute(event);
-        } else {
-            komentotehdas.undoKomento();
-        }
-        
+        komentotehdas.execute(event);
     }
 
 }

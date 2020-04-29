@@ -10,6 +10,9 @@ import laskin.Sovelluslogiikka;
  */
 public class Miinus extends BinaariKomento {
 
+    private int arvo;
+    private int tulos;
+    
     public Miinus(
         TextField tuloskentta, 
         TextField syotekentta, 
@@ -22,7 +25,8 @@ public class Miinus extends BinaariKomento {
 
     @Override
     public void suorita() {
-        super.otaArvo();
-        super.sovellus.miinus(arvo);
+        this.tulos = sovellus.tulos();
+        this.arvo = Integer.valueOf(syotekentta.getText());
+        super.sovellus.miinus(this.arvo);
     }
 }
